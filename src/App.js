@@ -1,58 +1,26 @@
-import React from 'react';
-import logo from './logo.svg';
-import { Counter } from './features/counter/Counter';
-import './App.css';
+import { useDispatch, useSelector } from 'react-redux';
+import CartContainer from './components/CartContainer';
+import Navbar from './components/Navbar';
+import { useEffect } from 'react';
+import { calculateTotals } from './features/cart/cartSlice';
+import Modal from './components/Modal';
+
 
 function App() {
+  const {cartItems} = useSelector((store)=> store.cart);
+  const {isOpen} = useSelector((store) => store.modal);
+
+  const dispatch = useDispatch();
+
+  useEffect(()=> {
+    dispatch(calculateTotals())
+  }, [cartItems, dispatch]);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <Counter />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <span>
-          <span>Learn </span>
-          <a
-            className="App-link"
-            href="https://reactjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux-toolkit.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux Toolkit
-          </a>
-          ,<span> and </span>
-          <a
-            className="App-link"
-            href="https://react-redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React Redux
-          </a>
-        </span>
-      </header>
-    </div>
+    <main>
+      {isOpen && <Modal />}
+      <Navbar />
+      <CartContainer />
+    </main>
   );
 }
-
 export default App;
